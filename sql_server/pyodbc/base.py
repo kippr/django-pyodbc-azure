@@ -372,6 +372,10 @@ class DatabaseWrapper(BaseDatabaseWrapper):
             self._use_legacy_datetime()
             self.features.supports_microsecond_precision = False
 
+        isolation = options.get('transaction_isolation')
+        if isolation:
+            cursor.execute('SET TRANSACTION ISOLATION LEVEL {}'.format(isolation))
+
     def is_usable(self):
         try:
             self.create_cursor().execute("SELECT 1")
